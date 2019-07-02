@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Igra memorije</title>
+    <style type="text/css">
+        div div {
+            background-color: red;
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            border: grey 4px solid;
+            border-radius: 10px;
+            margin: 5px;
+            text-align: center;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="mesanjeKarata(spilKarata)">promesaj</button>
+
+    <h1>Memorija</h1>
+
+    <p id="pokusaj"></p>
+
+    <p id="pogodak"></p>
+    Nivo:
+    <p id="nivo"></p>
+    <div id="tabla"></div>
+
+    <script>
+        var spilKarata = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
+        console.log(spilKarata);
+        var brojKarata = spilKarata.length;
+        //var nizOtvorenih = [];
+        var a = -1;
+        var b = -1;
+        var brojac = 0;
+        var pogodak = 0;
+
+
+        //BUBLING efekat. event.target.tagname= target ; this.tagName = this.RADI
+
+        $("div").click(function(event) {
+            console.log(event.target.innerHTML);
+            (event.target.tagName == 'DIV')
+            event.target.style.backgroundColor = 'green';
+            event.target.style.color = 'black';
+            var otvorena = event.target.innerHTML;
+            if (a < 0) {
+                a = otvorena;
+                var a1 = event.target;
+                console.log(a);
+            } else {
+                b = otvorena;
+                var b1 = event,
+                    target;
+                console.log(b);
+            }
+
+            function provera() {
+
+
+                if (a > -1 && b > -1) {
+                    brojac++;
+                    if (a == b) {
+                        pogodak++;
+                        document.getElementById("pogodak").innerHTML = "Pogodak br " + pogodak;
+                        $(".karta" + a).css({
+                            "background-color": "grey",
+                            "color": "grey"
+                        });
+
+                        $(".karta" + b).css({
+                            "background-color": "grey",
+                            "color": "grey"
+                        });
+                        $(".karta " + b).off("click");
+                        a = -1;
+                        b = -1;
+                    } else {
+
+                        $(".karta" + a).css({
+                            "background-color": "red",
+                            "color": "red"
+                        });
+                        $(".karta" + b).css({
+                            "background-color": "red",
+                            "color": "red"
+                        });
+
+                        a = -1;
+                        b = -1;
+                    }
+
+                    document.getElementById("pokusaj").innerHTML = "Pokusaj br: " + brojac;
+                }
+
+            }
+
+            setTimeout(provera, 2000);
+
+        });
+
+
+        function mesanjeKarata(niz) {
+            while (brojKarata !== 0) {
+                var indeksKarte = Math.floor((Math.random() * brojKarata) + 0); //vraca broj [0 do 15]               
+                brojKarata--;
+                trenutnaVrednost = niz[brojKarata];
+                niz[brojKarata] = niz[indeksKarte];
+                niz[indeksKarte] = trenutnaVrednost;
+            }
+            console.log(niz);
+            brojKarata = spilKarata.length;
+            napraviTablicu(niz);
+            return niz;
+        }
+
+        function napraviTablicu(niz) {
+            var tabla = document.getElementById('tabla');
+            tabla.innerHTML = '';
+
+            for (let i = 0; i < niz.length; i++) {
+
+                var karta = document.createElement('div');
+                karta.setAttribute('class', 'karta' + niz[i]);
+                //karta.setAttribute('class', 'klasaKarta');
+                karta.innerHTML = niz[i];
+
+                tabla.appendChild(karta);
+                if (i % 4 == 3) {
+                    var sledeciRed = document.createElement('br');
+                    tabla.appendChild(sledeciRed);
+                }
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>
